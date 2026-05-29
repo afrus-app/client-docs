@@ -18,8 +18,9 @@ Cada carpeta agrupa documentación de un módulo o área temática. Dentro de ca
 
 Integración con Google Analytics 4, Meta Conversions API y Google Tag Manager.
 
-- [Preguntas frecuentes sobre Analytics](./analytics/faq.md) — estado actual de soporte, deduplicación, cross-domain, UTMs
-- [Guía de configuración GTM para deduplicación de eventos](./analytics/gtm-deduplication-guide.md) — cómo coordinar tus tags de GTM con los eventos que AFRUS ya envía
+- [Preguntas frecuentes sobre Analytics](./analytics/faq.md) — estado actual de soporte, deduplicación, cross-domain, UTMs, beneficios medibles de la integración
+- [Mapa de eventos de Analytics](./analytics/event-map-reference.md) — referencia técnica que mapea cada paso del funnel a su nombre correspondiente en AFRUS, GTM, Meta y GA4, con el flujo end-to-end de deduplicación
+- [Guía de configuración GTM para deduplicación de eventos](./analytics/gtm-deduplication-guide.md) — cómo coordinar tus tags de GTM con los eventos que AFRUS ya envía vía CAPI / Measurement Protocol
 
 ## Próximamente
 
