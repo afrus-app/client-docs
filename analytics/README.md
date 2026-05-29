@@ -17,6 +17,15 @@ Estado actual del soporte de AFRUS para Google Analytics 4, Meta Conversions API
 - ¿Es posible enviar eventos a GA4 sin duplicados?
 - Limitaciones conocidas a esta fecha
 
+### [Mapa de eventos de Analytics — referencia técnica](./event-map-reference.md)
+
+Documento de referencia que detalla qué evento AFRUS envía a cada plataforma (Meta y GA4) en cada paso del funnel del donante, separado por tipo de widget. Útil para:
+
+- Entender qué se reporta a Meta Ads Manager y GA4 para cada acción del usuario
+- Verificar end-to-end que los eventos llegan correctamente
+- Configurar campañas optimizadas por evento de conversión correcto
+- Entender cómo AFRUS deduplica entre el envío server-side y browser-side
+
 ### [Guía de configuración GTM para deduplicación de eventos](./gtm-deduplication-guide.md)
 
 Guía técnica detallada para clientes que tienen sus propias tags de Meta Pixel o GA4 configuradas en Google Tag Manager y necesitan coordinar la deduplicación contra los eventos que AFRUS envía vía CAPI / Measurement Protocol.
