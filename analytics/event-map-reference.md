@@ -106,6 +106,17 @@ Para otros eventos (`view_item`, `add_to_cart`, etc.), GA4 no tiene mecanismo na
 | Donación | 1 × `Purchase` (servidor + navegador colapsados) |
 | Registro / Signup | 1 × `Lead` total (los disparos de captura de lead + de registro completado se deduplican entre sí y contra el envío server-side) |
 
+### Por qué importa la deduplicación
+
+Con la implementación actual de AFRUS (post-despliegues de mayo 2026):
+
+- **Cobertura de Event ID en Meta:** 75-100% en eventos donde ambos canales disparan (vs. 0% antes)
+- **Event Match Quality (EMQ):** típicamente sube de ~4-5/10 a ~7-8/10
+- **Costo por resultado en campañas Meta:** Meta documenta hasta **-54.9% lower cost per result** para anunciantes que alcanzan 75% de cobertura ([referencia oficial](https://developers.facebook.com/documentation/ads-commerce/conversions-api/deduplicate-pixel-and-server-events))
+- **Conteo en GA4:** los usuarios únicos reflejan visitantes reales (post-PR #440 que corrigió `client_id` para no colapsar todos los visitantes en uno solo)
+
+En términos de campaña: los algoritmos de optimización de Meta y GA4 reciben señales más limpias → mejor optimización automática → menor CPM efectivo, mejor ROAS, métricas de Ads Manager que reflejan la realidad.
+
 ---
 
 ## Configuración necesaria por escenario
