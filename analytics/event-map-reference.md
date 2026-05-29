@@ -38,19 +38,37 @@ El envío browser-side captura todo el funnel previo (no solo la conversión fin
 
 ## Qué eventos se envían a cada plataforma
 
-### Por tipo de widget
+### Mapeo de nombres de eventos por plataforma
 
-| Tipo de widget | Paso del funnel | Evento en Meta | Evento en GA4 |
-|---|---|---|---|
-| Todos | Vista inicial del widget | `ViewContent` | `view_item` |
-| Todos | Selección de monto / interés inicial | `AddToCart` | `add_to_cart` |
-| Todos | Captura del lead (datos personales) | `Lead` | `generate_lead` |
-| Donación | Inicio del checkout | `InitiateCheckout` | `begin_checkout` |
-| Donación | Selección del método de pago | `AddPaymentInfo` | `add_payment_info` |
-| Donación ★ | Pago confirmado por la pasarela | `Purchase` *(o `Donate` si la organización lo tiene configurado)* | `purchase` |
-| Registro | Registro completado | `Lead` | `sign_up` |
+El mismo evento del funnel tiene **nombres diferentes** según la plataforma o el contexto. Esta tabla muestra todos los nombres en uso para que puedas correlacionar lo que ves en cada lugar (panel AFRUS, dataLayer del navegador, Meta Events Manager, GA4 reports).
+
+| Paso del funnel | AFRUS internal (panel Trackers) | GTM `dataLayer.event` | Meta event_name | GA4 event_name |
+|---|---|---|---|---|
+| Vista inicial del widget | `start` | `start` | `ViewContent` | `view_item` |
+| Selección de monto / interés inicial | `add_to_cart` | `add_to_cart` | `AddToCart` | `add_to_cart` |
+| Captura del lead (mid-funnel) | `generate_lead` | `generate_lead` | `Lead` | `generate_lead` |
+| Inicio del checkout | `begin_checkout` | `begin_checkout` | `InitiateCheckout` | `begin_checkout` |
+| Selección del método de pago | `add_payment_info` | `add_payment_info` | `AddPaymentInfo` | `add_payment_info` |
+| Pago confirmado por la pasarela ★ | `purchase` | `purchase` | `Purchase` *(o `Donate` si la organización lo tiene configurado)* | `purchase` |
+| Registro completado ★ | `register` | *(no se publica al dataLayer)* | `Lead` | `sign_up` |
 
 ★ = evento de conversión (es lo que se cuenta como "conversión" en Meta Ads Manager y en GA4 para optimización de campañas).
+
+**Notas sobre la tabla:**
+
+- **AFRUS internal** es el valor que aparece en el campo `event` del JSON registrado en el panel **Procesos → Analytics Events** del admin AFRUS.
+- **GTM `dataLayer.event`** es el valor que tu tag de GTM debe usar en el Trigger de tipo "Custom Event" para reaccionar al evento. Es **idéntico** al nombre interno de AFRUS (lowercase, snake_case).
+- **Meta `event_name`** es el nombre estándar de Meta Pixel — sensible a mayúsculas (`Lead` ≠ `lead`).
+- **GA4 `event_name`** es el nombre estándar de GA4 — siempre lowercase, snake_case.
+- El evento `register` se dispara internamente en el widget y se envía a Meta y GA4, pero **no se publica al dataLayer del navegador**. Si tu tag de GTM necesita reaccionar al registro completado, usa el evento `generate_lead` (que sí se publica).
+
+### Cuáles aplican a cada tipo de widget
+
+| Tipo de widget | Paso del funnel |
+|---|---|
+| Todos | `start`, `add_to_cart`, `generate_lead` |
+| Donación (única o recurrente) | `start`, `add_to_cart`, `generate_lead`, `begin_checkout`, `add_payment_info`, `purchase` |
+| Registro / Signup | `start`, `add_to_cart`, `generate_lead`, `register` |
 
 ### Notas importantes
 
