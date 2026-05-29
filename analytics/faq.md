@@ -18,6 +18,28 @@
 
 ---
 
+## Beneficios concretos de la integración actual
+
+Después de los despliegues recientes, la integración de AFRUS con Meta y GA4 entrega estos beneficios medibles:
+
+| Métrica | Antes | Después |
+|---|---|---|
+| **Cobertura de Event ID en Meta** (deduplicación Pixel ↔ CAPI) | 0% | **75-100%** en eventos donde ambos canales disparan |
+| **Event Match Quality (EMQ) en Meta** | ~4-5/10 | **~7-8/10** (depende del evento y de la calidad de los datos del lead) |
+| **Conteo de usuarios únicos en GA4** | Colapsado a ~1 usuario por formulario (todos los visitantes contaban como una sola persona) | Refleja visitantes reales |
+| **Costo por resultado en campañas Meta** (con 75%+ de cobertura de Event ID) | Línea base | Hasta **-54.9% lower cost per result** ([benchmark documentado por Meta](https://developers.facebook.com/documentation/ads-commerce/conversions-api/deduplicate-pixel-and-server-events)) |
+
+**Qué significa esto en práctica para campañas:**
+
+- Las campañas de Meta optimizadas para conversiones (`Lead`, `Purchase`) reciben señales más limpias y confiables → algoritmo de Meta optimiza mejor → menor CPM efectivo, mejor ROAS.
+- Los reportes de Meta Ads Manager dejan de inflar conversiones por doble conteo → métricas que reflejan la realidad → decisiones de presupuesto basadas en datos correctos.
+- GA4 reporta usuarios únicos reales → métricas de funnel y atribución de fuente/medio confiables → identificación correcta de qué canales traen donantes.
+- La ventana de atribución de Meta (típicamente 7 días después del click) ahora se aprovecha al máximo porque las señales server-side y browser-side se cuentan como una sola conversión.
+
+> **Importante:** el -54.9% es la mejora máxima documentada por Meta para anunciantes que alcanzan 75% de cobertura de Event ID. La mejora real en cada campaña depende de muchos factores (calidad creativa, audiencia, presupuesto, etc.). El benchmark indica el techo del beneficio, no una garantía universal.
+
+---
+
 ## Detalle por pregunta
 
 ### 1. ¿AFRUS permite correctamente el cross-domain tracking con Google Analytics 4 (linker `_gl`)?

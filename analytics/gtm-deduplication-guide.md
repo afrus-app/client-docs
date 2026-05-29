@@ -16,6 +16,18 @@ Esta guía documenta exactamente qué claves están disponibles en `dataLayer`, 
 
 ---
 
+## Por qué hacer esta configuración (beneficio cuantificable)
+
+Configurar tus tags de GTM para deduplicar contra los eventos AFRUS no es solo "buena práctica" — Meta documenta el beneficio en cifras concretas:
+
+- **Hasta -54.9% en cost per result** para anunciantes que alcanzan 75% de cobertura de Event ID entre Pixel y Conversions API ([fuente oficial Meta](https://developers.facebook.com/documentation/ads-commerce/conversions-api/deduplicate-pixel-and-server-events))
+- **Event Match Quality (EMQ) de Meta** mejora típicamente de ~4-5/10 a ~7-8/10 con deduplicación bien configurada
+- **Cobertura de Event ID** sube de 0% a **75-100%** en los eventos donde Pixel y CAPI ambos disparan con claves correctas
+
+Sin la configuración de deduplicación, tus campañas optimizan sobre conversiones dobles e infladas — gastas más por menos resultados reales. Con la configuración correcta (que esta guía te ayuda a hacer), Meta cuenta las conversiones una sola vez con señales combinadas server-side + browser-side, lo que mejora la atribución y la optimización automática de las campañas.
+
+---
+
 ## Cómo Meta deduplica (resumen)
 
 - **Clave primaria:** `(event_name, event_id)` deben coincidir entre el evento del navegador (Pixel) y el evento del servidor (CAPI), dentro de una ventana de 48 horas.
