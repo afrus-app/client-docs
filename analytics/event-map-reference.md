@@ -121,6 +121,19 @@ En términos de campaña: los algoritmos de optimización de Meta y GA4 reciben 
 
 ## Configuración necesaria por escenario
 
+### Landing y widget: los dos son necesarios y no son redundantes
+
+Para que la atribución funcione de punta a punta (desde el primer click en un anuncio hasta la confirmación del pago), hay que configurar tanto la **landing** como el **widget**. Cada uno captura una parte distinta del funnel:
+
+| Lugar | Rol |
+|---|---|
+| **Landing** | Captura el inicio de sesión: lee las UTMs de la URL, crea el cookie `_ga` con el `client_id`, captura el cookie `_fbc` si el visitante viene de un anuncio de Meta (`?fbclid=...`). |
+| **Widget** | Usa esos valores al enviar cada evento del funnel a Meta CAPI y GA4. El `client_id` y el `_fbc` que la landing capturó viajan en cada evento, manteniendo la atribución consistente hasta la conversión. |
+
+Sin la configuración de la landing, AFRUS envía eventos pero sin `_fbc` (atribución Meta degradada) y sin el `client_id` real del navegador. Sin la configuración del widget, los eventos de conversión (`Purchase`, `Lead`) directamente no se envían.
+
+---
+
 ### Para que un widget envíe eventos correctamente a Meta (vía Conversions API)
 
 En el editor del widget (admin de AFRUS), pestaña **Avanzado**, sección **Facebook CAPI**:

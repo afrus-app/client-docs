@@ -16,6 +16,7 @@ Estado actual del soporte de AFRUS para Google Analytics 4, Meta Conversions API
 - ¿Se puede enviar el valor real de la donación dinámicamente?
 - ¿Es posible enviar eventos a GA4 sin duplicados?
 - ¿Necesito configurar algo de mi lado según mi escenario? (tabla de decisión rápida)
+- ¿Tengo que configurar el tracking en la landing, en el widget, o en los dos?
 - Limitaciones conocidas a esta fecha
 
 ### [Mapa de eventos de Analytics — referencia técnica](./event-map-reference.md)

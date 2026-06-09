@@ -170,6 +170,40 @@ Depende del escenario. Esta tabla es el punto de entrada para saber qué aplica 
 
 ---
 
+### 8. ¿Tengo que configurar el tracking en la landing, en el widget, o en los dos?
+
+**En los dos**, pero cada uno cumple un rol distinto y complementario. No son redundantes.
+
+| Dónde | Qué configurar | Para qué sirve |
+|---|---|---|
+| **Landing** → pestaña *Datos avanzados* | **Facebook Pixel ID** | Inyecta el SDK de Meta Pixel, dispara `PageView`, y captura el cookie `_fbc` cuando el visitante viene desde un anuncio de Meta (`?fbclid=...` en la URL). Sin esto, la atribución de Meta Ads se degrada. |
+| **Landing** → pestaña *Datos avanzados* | **Google Analytics ID** (`G-XXXXXXXXXX`) | Inyecta `gtag.js`, dispara `PageView` browser-side, lee las UTMs de la URL, y crea el cookie `_ga` con el `client_id`. Este cookie es el hilo que conecta toda la sesión GA4 de principio a fin. |
+| **Widget** → pestaña *Avanzado* | **Pixel ID + Access Token** | Permite que AFRUS envíe los eventos del funnel a Meta CAPI: `ViewContent`, `AddToCart`, `Lead`, `Purchase`, etc. |
+| **Widget** → pestaña *Avanzado* | **Measurement ID + API Secret** | Permite que AFRUS envíe los eventos del funnel a GA4 vía Measurement Protocol, usando el mismo `client_id` del cookie `_ga` que `gtag.js` creó en la landing. |
+
+**Por qué los dos son necesarios juntos:**
+
+- La **landing** captura el inicio de sesión: UTMs, cookie `_ga`, cookie `_fbc`.
+- El **widget** lee esos valores al enviar cada evento del funnel.
+
+Si configurás solo el widget sin la landing: AFRUS puede enviar eventos, pero sin `_fbc` (atribución Meta degradada) y sin el `client_id` real del navegador (GA4 crea un ID de fallback en lugar de leer el de la sesión).
+
+Si configurás solo la landing sin el widget: `PageView` se registra, pero los eventos de conversión (`Purchase`, `Lead`) no se envían.
+
+**Configuración mínima recomendada:**
+
+```
+Landing  → Facebook Pixel ID
+         → Google Analytics ID
+
+Widget   → Pixel ID + Access Token       (Meta CAPI)
+         → Measurement ID + API Secret   (GA4)
+```
+
+Ver referencia técnica completa con campos y dónde encontrarlos: [Mapa de eventos — sección Configuración necesaria por escenario](./event-map-reference.md#configuración-necesaria-por-escenario).
+
+---
+
 ## Limitaciones conocidas a esta fecha
 
 Estas son las brechas existentes en la implementación actual. Algunas son intencionales (compromisos de diseño), otras son items que pueden trabajarse si hay demanda específica del cliente.
