@@ -15,6 +15,7 @@ Estado actual del soporte de AFRUS para Google Analytics 4, Meta Conversions API
 - ¿Meta CAPI envía `event_id` para deduplicación?
 - ¿Se puede enviar el valor real de la donación dinámicamente?
 - ¿Es posible enviar eventos a GA4 sin duplicados?
+- ¿Necesito configurar algo de mi lado según mi escenario? (tabla de decisión rápida)
 - Limitaciones conocidas a esta fecha
 
 ### [Mapa de eventos de Analytics — referencia técnica](./event-map-reference.md)

@@ -156,6 +156,20 @@ El `value` se toma directamente del monto seleccionado por el donante en el form
 
 ---
 
+### 7. ¿Necesito configurar algo de mi lado según cómo tengo el tracking?
+
+Depende del escenario. Esta tabla es el punto de entrada para saber qué aplica a tu caso:
+
+| Escenario | ¿Hay algo que hacer? | Recurso |
+|---|---|---|
+| **AFRUS es el único que envía eventos a Meta y GA4** (no tenés tags propias en GTM para estos eventos) | No — todo funciona por defecto. No se requiere configuración adicional. | — |
+| **Tenés tus propias tags de Meta Pixel o GA4 en un contenedor de GTM** que disparan eventos de conversión (Lead, Purchase) | Sí — hay que configurar esas tags para usar las claves de deduplicación que AFRUS expone en el `dataLayer`. Sin esta config, Meta y GA4 contarán los eventos dos veces. | [Guía de configuración GTM para deduplicación](./gtm-deduplication-guide.md) |
+| **Querés preservar el `client_id` de GA4 entre tu dominio y los landings de AFRUS** (cross-domain tracking) | Sí — en tu gtag.js o contenedor GTM tenés que agregar `web.afrus.org` a la lista `linker.domains`. AFRUS no lo configura automáticamente. | Ver pregunta 1 de este FAQ |
+
+**Nota sobre UTMs en la URL de la página de agradecimiento:** la atribución de fuente/medio en GA4 se conserva vía cookie `_ga` — no se pierden las sesiones ni las conversiones. Lo que no ocurre es que las UTMs aparezcan como parámetros en la URL de esa página. Si tu caso de uso requiere UTMs en la URL final, consultá al equipo AFRUS. Ver pregunta 2 de este FAQ para el detalle técnico.
+
+---
+
 ## Limitaciones conocidas a esta fecha
 
 Estas son las brechas existentes en la implementación actual. Algunas son intencionales (compromisos de diseño), otras son items que pueden trabajarse si hay demanda específica del cliente.
