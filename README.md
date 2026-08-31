@@ -28,6 +28,12 @@ Creación y lectura de pruebas A/B entre versiones de una landing.
 
 - [Guía completa de experimentos A/B](./landing-experiments/ab-testing-guide.md) — paso a paso de creación, especificación de las variantes y los pesos, ciclo de vida, reparto de tráfico con el splitter, y cómo se calcula cada estadística del panel de resultados (tasa de conversión, lift, significancia, filtrado de bots). Incluye buenas prácticas, limitaciones conocidas y preguntas frecuentes.
 
+### [Flujos de trabajo](./workflows/)
+
+Secuencias automatizadas de correos, etiquetas y puntos.
+
+- [Guía completa de Flujos de trabajo](./workflows/workflows-guide.md) — paso a paso de creación, los seis tipos de paso, disparadores de entrada y salida, la meta, filtros de inscripción, inscripción retroactiva, ventana de envío, ciclo de vida y cómo leer el reporte (tasa de meta, entrega por paso, historial por persona). Incluye buenas prácticas, limitaciones conocidas y preguntas frecuentes.
+
 ## Próximamente
 
 Las siguientes secciones están planificadas y se irán incorporando a medida que la documentación esté lista. El orden de aparición se ajustará según prioridades.
