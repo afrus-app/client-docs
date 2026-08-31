@@ -22,6 +22,12 @@ Integración con Google Analytics 4, Meta Conversions API y Google Tag Manager.
 - [Mapa de eventos de Analytics](./analytics/event-map-reference.md) — referencia técnica que mapea cada paso del funnel a su nombre correspondiente en AFRUS, GTM, Meta y GA4, con el flujo end-to-end de deduplicación
 - [Guía de configuración GTM para deduplicación de eventos](./analytics/gtm-deduplication-guide.md) — cómo coordinar tus tags de GTM con los eventos que AFRUS ya envía vía CAPI / Measurement Protocol
 
+### [Experimentos A/B de landings](./landing-experiments/)
+
+Creación y lectura de pruebas A/B entre versiones de una landing.
+
+- [Guía completa de experimentos A/B](./landing-experiments/ab-testing-guide.md) — paso a paso de creación, especificación de las variantes y los pesos, ciclo de vida, reparto de tráfico con el splitter, y cómo se calcula cada estadística del panel de resultados (tasa de conversión, lift, significancia, filtrado de bots). Incluye buenas prácticas, limitaciones conocidas y preguntas frecuentes.
+
 ## Próximamente
 
 Las siguientes secciones están planificadas y se irán incorporando a medida que la documentación esté lista. El orden de aparición se ajustará según prioridades.
@@ -43,4 +49,4 @@ Este repositorio es mantenido por el equipo AFRUS. Si encuentras información de
 
 ---
 
-*Última actualización del índice: 2026-05-29*
+*Última actualización del índice: 2026-08-31*
