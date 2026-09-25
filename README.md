@@ -34,6 +34,12 @@ Secuencias automatizadas de correos, etiquetas y puntos.
 
 - [Guía completa de Flujos de trabajo](./workflows/workflows-guide.md) — paso a paso de creación, los seis tipos de paso, disparadores de entrada y salida, la meta, filtros de inscripción, inscripción retroactiva, ventana de envío, ciclo de vida y cómo leer el reporte (tasa de meta, entrega por paso, historial por persona). Incluye buenas prácticas, limitaciones conocidas y preguntas frecuentes.
 
+### [Face to Face (captación presencial)](./face-to-face/)
+
+Avisos por correo al captador y al supervisor, y protección de datos en dispositivos compartidos.
+
+- [Guía de Face to Face](./face-to-face/face-to-face-guide.md) — activación y configuración, cuándo se envía el aviso por correo y qué contiene, cómo desactivar el autocompletado del navegador en tablets compartidas (qué cubre y qué no), el atributo `disable-autofill` para formularios insertados en un sitio propio, buenas prácticas y preguntas frecuentes.
+
 ## Próximamente
 
 Las siguientes secciones están planificadas y se irán incorporando a medida que la documentación esté lista. El orden de aparición se ajustará según prioridades.
@@ -55,4 +61,4 @@ Este repositorio es mantenido por el equipo AFRUS. Si encuentras información de
 
 ---
 
-*Última actualización del índice: 2026-08-31*
+*Última actualización del índice: 2026-09-25*
