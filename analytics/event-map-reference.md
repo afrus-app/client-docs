@@ -2,7 +2,7 @@
 
 **Audiencia:** equipos técnicos de clientes (ad-ops, integradores, analistas de marketing) que necesitan saber exactamente qué eventos AFRUS envía a Meta y a Google Analytics 4, desde dónde los envía, y cómo se deduplican.
 
-**Última actualización:** 2026-05-29
+**Última actualización:** 2026-09-25
 
 ---
 
@@ -12,17 +12,19 @@ AFRUS dispara eventos de analytics desde **dos lugares diferentes**, según el m
 
 ### 1. Envío desde el servidor (post-pago)
 
-Después de que la pasarela de pago confirma una transacción o un registro, el backend de AFRUS envía un evento directamente a Meta Conversions API.
+Después de que la pasarela de pago confirma una transacción o un registro, el backend de AFRUS envía el evento de conversión directamente a las plataformas.
 
-- Plataformas destino: **solo Meta**
-- Cuándo se dispara: después de un webhook de pago exitoso o de creación de un lead confirmado
-- No requiere navegador — funciona aunque el usuario cierre la página antes de que cargue el tracking del lado del cliente
+- Plataformas destino: **Meta** (Conversions API) para `Purchase` y `Lead`, y **Google Analytics 4** (Measurement Protocol) para `purchase`
+- Cuándo se dispara: cuando la donación queda confirmada (la pasarela aprobó el pago) o cuando se crea un lead confirmado
+- No requiere navegador — funciona aunque el usuario cierre la página antes de que cargue el tracking del lado del cliente, o antes de que la pasarela confirme un pago asíncrono
+- Para GA4, AFRUS usa el `client_id` del cookie `_ga` que el widget guardó al crear la donación. Así la compra queda atribuida a la sesión y a la campaña original del donante, aunque la confirmación llegue horas después
 
 ### 2. Envío desde el navegador (durante el funnel)
 
 A medida que el donante avanza por el flujo del widget (ver landing → ingresar monto → completar datos → confirmar pago), el widget AFRUS dispara eventos en cada paso.
 
 - Plataformas destino: **Meta** (vía Conversions API) y **Google Analytics 4** (vía Measurement Protocol)
+- Excepción: el `purchase` de GA4 **no** se envía desde el navegador. Lo envía solo el servidor (ver arriba), para que GA4 no cuente la misma compra dos veces
 - Cuándo se dispara: a cada acción del usuario en el widget (vista, selección de monto, ingreso de datos, confirmación, etc.)
 - Requiere navegador activo durante el flujo
 
@@ -72,7 +74,10 @@ El mismo evento del funnel tiene **nombres diferentes** según la plataforma o e
 
 ### Notas importantes
 
-- **`Purchase` solo se dispara cuando la pasarela confirma el cobro.** Para pagos asíncronos (Niubiz, PIX, boleto), AFRUS espera la confirmación de la pasarela antes de enviar el evento. Esto previene `Purchase` "fantasma" por intentos que terminan rechazados.
+- **`Purchase` solo se reporta cuando el pago está confirmado.** Crear la transacción no alcanza: un Pix con el QR generado, un boleto emitido o un pago que todavía espera a la pasarela no cuentan como compra. Esto previene `Purchase` "fantasma" por pagos que nunca se completan.
+  - **Pagos con confirmación inmediata (por ejemplo, tarjeta):** el evento sale apenas la pasarela aprueba el cobro.
+  - **Pagos asíncronos (Pix, boleto y otros métodos que confirman después):** el evento sale cuando la pasarela confirma el pago, aunque el donante ya haya cerrado la página. En ese momento el servidor de AFRUS envía `Purchase` a Meta y `purchase` a GA4.
+  - Si el donante todavía tiene abierta la pantalla del Pix cuando se confirma el pago, el widget además publica `purchase` en el `dataLayer` para las tags de GTM propias del cliente (ver la [guía de GTM](./gtm-deduplication-guide.md)). Si ya la cerró, no hay `dataLayer`, pero Meta y GA4 reciben la conversión igual, desde el servidor.
 - **`Lead` se dispara cuando el lead se crea exitosamente en la base de datos.** Si falta información requerida, AFRUS no envía el evento (en lugar de enviar uno con datos vacíos que ensuciaría las métricas).
 - **Las organizaciones pueden configurar el evento de donación** para enviarse como `Donate` (evento estándar de Meta para sin fines de lucro) en lugar de `Purchase` (evento estándar de e-commerce). Esta configuración se hace a nivel de organización en el backend de AFRUS.
 - **El evento `Lead` puede dispararse dos veces durante el flujo** (en captura del lead mid-funnel + al confirmar el registro). AFRUS usa el mismo `lead_id` en ambos, por lo que Meta los deduplica a uno.
@@ -95,7 +100,9 @@ Meta deduplica eventos que comparten `(event_name, event_id)` dentro de una vent
 
 ### Para GA4
 
-GA4 solo deduplica automáticamente eventos `purchase` que comparten el mismo `transaction_id`. AFRUS envía `transaction_gateway_code` como `transaction_id`, garantizando que las compras se deduplican correctamente.
+AFRUS envía cada `purchase` a GA4 **una sola vez, desde el servidor**, con `transaction_id` = `transaction_gateway_code` (la referencia que devuelve la pasarela de pago). El navegador no envía un segundo `purchase`, así que del lado de AFRUS no hay nada que deduplicar.
+
+Si además tienes tu propia tag de GA4 para `purchase` en GTM, configúrala con el mismo `transaction_gateway_code` como `transaction_id` (ver la [guía de GTM](./gtm-deduplication-guide.md)). GA4 usa el `transaction_id` para descartar compras repetidas.
 
 Para otros eventos (`view_item`, `add_to_cart`, etc.), GA4 no tiene mecanismo nativo de deduplicación cross-canal. Si el cliente tiene además sus propios tags GA4 en GTM disparando estos eventos, ver la [guía de deduplicación GTM](./gtm-deduplication-guide.md).
 
@@ -189,7 +196,7 @@ Esto inyecta `gtag.js` en la landing, que dispara `PageView` browser-side y capt
 
 ### Lado GA4
 
-1. **GA4 DebugView**: dispara un evento `purchase` y verifica que aparezca con `transaction_id` poblado.
+1. **GA4 → Informes → Tiempo real**: haz una donación de prueba con un método de confirmación inmediata (por ejemplo, tarjeta) y verifica que aparezca el evento `purchase`. Como lo envía el servidor de AFRUS, no aparece en DebugView (DebugView solo muestra eventos enviados en modo depuración). En los informes de compras, el ID de transacción debe ser la referencia de la pasarela.
 2. **GA4 Reports → Users / Sessions**: la cuenta de usuarios debe reflejar visitantes reales (no inflada ni colapsada).
 3. **GA4 DebugView**: confirma que el `client_id` se mantiene estable entre eventos del mismo navegador (mismo `_ga` cookie).
 
@@ -212,6 +219,9 @@ Ver guía detallada: [**Configuración GTM para deduplicación de eventos**](./g
 - **Cross-domain GA4 (linker `_gl`)**: los landings AFRUS no auto-configuran `linker.domains` en gtag.js. Si el flujo cruza dominios (sitio cliente ↔ landing AFRUS), el cliente debe configurar `linker.domains` en su propio gtag.js para preservar el `client_id` entre dominios.
 - **UTMs en URLs de redirección**: la atribución GA4 se preserva a través del cookie `_ga`, pero las UTMs no se propagan como parámetros en las URLs de página de agradecimiento.
 - **Eventos de funnel (ViewContent, AddToCart, InitiateCheckout, AddPaymentInfo) no exponen claves de deduplicación al `dataLayer`**: si un cliente tiene tags GTM disparando estos eventos en paralelo, no podrán deduplicar contra los eventos AFRUS para estos eventos específicos. Solo aplica a `Lead` y `Purchase` la deduplicación cross-canal vía GTM.
+- **Donaciones creadas fuera del widget** (carga manual desde el admin, API o importaciones) no envían `purchase` a GA4: no tienen el `client_id` del navegador del donante, y GA4 no podría atribuirlas a ninguna sesión.
+- **`dataLayer` y pagos asíncronos**: para Pix y boleto, el `purchase` del `dataLayer` solo se publica si el donante mantiene abierta la página hasta la confirmación. Las tags de GTM que dependen del `dataLayer` no ven las confirmaciones que llegan después de cerrar la página. Meta y GA4 sí las reciben, desde el servidor.
+- **"Afiliación del artículo" en GA4**: AFRUS dejó de enviar el campo `affiliation`, que llevaba un valor de ejemplo (`Google Merchandise Store`). En los informes de GA4 aparece como `(not set)` en las compras nuevas.
 
 ---
 

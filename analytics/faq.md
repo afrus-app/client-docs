@@ -1,6 +1,6 @@
 # AFRUS — Estado de la implementación de Analytics
 
-**Fecha de la instantánea:** 2026-05-29
+**Fecha de la instantánea:** 2026-09-25
 **Alcance:** estado actual del soporte de AFRUS para Google Analytics 4, Meta Conversions API (CAPI), y Google Tag Manager después de los despliegues recientes.
 
 ---
@@ -130,7 +130,7 @@ Después de los despliegues recientes, la integración de AFRUS con Meta y GA4 e
 
 El `value` se toma directamente del monto seleccionado por el donante en el formulario. Es dinámico por defecto, no requiere configuración adicional.
 
-**Caveat importante:** para pasarelas asíncronas (Niubiz, PIX, boleto), `Purchase` solo se dispara cuando `transaction_gateway_code` es truthy — es decir, después de que la pasarela confirma el cobro. Esto evita falsos `Purchase` por intentos que terminan rechazados.
+**Cuándo se envía:** `Purchase` solo se reporta cuando el pago está confirmado. Para pagos asíncronos (Pix, boleto), eso ocurre cuando la pasarela confirma el cobro, no cuando se genera el QR o se emite el boleto. El servidor de AFRUS envía el evento en ese momento, aunque el donante ya haya cerrado la página. Detalle en el [mapa de eventos](./event-map-reference.md#notas-importantes).
 
 ---
 
@@ -140,18 +140,18 @@ El `value` se toma directamente del monto seleccionado por el donante en el form
 
 #### Escenario A — AFRUS dispara GA4 sin que el cliente tenga sus propios tags GA4 en GTM
 
-- **No hay riesgo de duplicación.** AFRUS envía a GA4 vía Measurement Protocol con `client_id` correcto y `transaction_id` para eventos `purchase`.
+- **No hay riesgo de duplicación.** AFRUS envía los eventos del funnel a GA4 vía Measurement Protocol con el `client_id` correcto. El `purchase` lo envía **una sola vez, desde el servidor**, cuando el pago queda confirmado, con `transaction_id` = `transaction_gateway_code`.
 - Cada visitante se cuenta correctamente como un usuario único de GA4.
-- Las compras se deduplican automáticamente por `transaction_id`.
+- Los pagos asíncronos (Pix, boleto) también llegan a GA4 cuando se confirman, aunque el donante haya cerrado la página, y quedan atribuidos a su sesión original.
 
 #### Escenario B — AFRUS dispara GA4 + el cliente también tiene tags GA4 en GTM
 
-- **Para `purchase`**: GA4 deduplica automáticamente si ambos lados usan el mismo `transaction_id`. AFRUS usa `transaction_gateway_code` como `transaction_id` — el cliente debe configurar su tag GA4 en GTM para hacer lo mismo (`{{DLV - ecommerce.transaction_gateway_code}}`). Pedir al equipo AFRUS la guía de configuración.
+- **Para `purchase`**: GA4 usa el `transaction_id` para descartar compras repetidas. AFRUS usa `transaction_gateway_code` como `transaction_id` — el cliente debe configurar su tag GA4 en GTM para hacer lo mismo (`{{DLV - ecommerce.transaction_gateway_code}}`). Ver la [guía de GTM](./gtm-deduplication-guide.md). Como AFRUS ya envía el `purchase` desde el servidor, lo más simple es no configurar una tag propia para ese evento. Si la configuras, ten en cuenta que depende del `dataLayer`, y para Pix y boleto el `dataLayer` solo recibe el `purchase` si el donante sigue en la página cuando se confirma el pago.
 - **Para otros eventos** (`view_item`, `add_to_cart`, etc.): GA4 NO tiene mecanismo nativo de deduplicación cross-channel para eventos no-purchase. Si tanto AFRUS como GTM disparan `view_item`, GA4 los contará como dos eventos distintos. Recomendación: el cliente desactiva sus tags GA4 para esos eventos en GTM (confiando en lo que AFRUS envía), o coordina con AFRUS para que solo uno de los dos dispare.
 
 #### Verificación
 
-- GA4 DebugView → buscar el evento `purchase` → confirmar que `transaction_id` está presente y es único por transacción.
+- GA4 → Informes → Tiempo real → buscar el evento `purchase` (lo envía el servidor de AFRUS, así que no aparece en DebugView) → confirmar que `transaction_id` es la referencia de la pasarela y es único por transacción.
 - GA4 dashboard → métrica "Users" para la propiedad asociada → debe reflejar visitantes reales.
 
 ---
@@ -214,3 +214,6 @@ Estas son las brechas existentes en la implementación actual. Algunas son inten
 | UTMs no se propagan como parámetros de URL en redirecciones | Atribución GA4 funciona (vía cookie), pero las UTMs no llegan a la URL de thank-you | Documentado, no planificado |
 | Logs de GTM en panel de AFRUS no incluyen identificador de sesión del navegador | Atribución de eventos GTM requiere cross-reference con logs de Facebook/Google | En discusión, pendiente decisión de privacidad |
 | Eventos de funnel (ViewContent, AddToCart, InitiateCheckout, AddPaymentInfo) no exponen claves de deduplicación al `dataLayer` | Tags GTM del cliente no pueden deduplicar contra los eventos AFRUS para estos eventos específicos | Pendiente — coordinable si hay demanda |
+| Donaciones creadas fuera del widget (admin, API, importaciones) no envían `purchase` a GA4 | No hay `client_id` del navegador del donante para atribuirlas | Intencional |
+| Para Pix y boleto, el `purchase` del `dataLayer` requiere que el donante siga en la página hasta la confirmación | Las tags de GTM propias no ven las confirmaciones posteriores. Meta y GA4 sí las reciben, desde el servidor | Intencional (el navegador ya no está abierto) |
+| GA4 muestra "Afiliación del artículo" = `(not set)` en las compras nuevas | AFRUS dejó de enviar un valor de ejemplo (`Google Merchandise Store`) en `affiliation` | Intencional |
