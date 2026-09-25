@@ -48,8 +48,8 @@ Incluye:
 
 ## Estado de los documentos
 
-Estos documentos reflejan el estado de la integración de AFRUS a partir de los despliegues de mayo 2026. Las funcionalidades descritas como ✅ están en producción. Las limitaciones señaladas son brechas conocidas que pueden o no resolverse a futuro según demanda.
+Estos documentos reflejan el estado de la integración de AFRUS a partir de los despliegues de mayo 2026 y del cambio de septiembre 2026 en el momento en que se reporta `purchase` (solo con el pago confirmado, y el `purchase` de GA4 enviado desde el servidor). Las funcionalidades descritas como ✅ están en producción. Las limitaciones señaladas son brechas conocidas que pueden o no resolverse a futuro según demanda.
 
 ---
 
-*Última actualización: 2026-05-29*
+*Última actualización: 2026-09-25*

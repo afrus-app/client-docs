@@ -2,7 +2,7 @@
 
 **Audiencia:** equipos técnicos de clientes (ad-ops, integradores) que configuran sus propias tags de Google Tag Manager y necesitan que esas tags no dupliquen eventos contra los que AFRUS ya envía por Meta Conversions API (CAPI) y Google Analytics 4 Measurement Protocol.
 
-**Última actualización:** 2026-05-29
+**Última actualización:** 2026-09-25
 
 ---
 
@@ -106,14 +106,22 @@ Donde `{{DLV - ecommerce.lead_id}}` es una variable Data Layer Variable apuntand
 | Campo en `dataLayer` | Tipo | Uso para deduplicación |
 |----------------------|------|------------------------|
 | `event` | `'purchase'` | Trigger |
-| `ecommerce.transaction_id` | string | Referencia del gateway (uso interno) |
+| `ecommerce.transaction_id` | string | La misma referencia de la pasarela que `transaction_gateway_code`. Si la pasarela no devolvió referencia, lleva la referencia de la donación en AFRUS |
+| `ecommerce.donation_id` | string o number | Referencia de la donación en AFRUS, para tus reportes |
 | `ecommerce.transaction_gateway_code` | string | **Úsalo como `eventID` en tu tag de Meta Pixel para deduplicar con AFRUS CAPI** |
 | `ecommerce.transaction_gateway_code` | string | **Úsalo también como `transaction_id` en tu tag de GA4 para deduplicar la compra** |
 | `ecommerce.lead_id` | string o number | Identifica al donante |
 | `ecommerce.items[0].price` | number | Monto donado |
 | `ecommerce.currency` | string | Moneda |
 
-> **Importante:** AFRUS usa `transaction_gateway_code` (la referencia que devuelve la pasarela de pago) como `event_id` para deduplicar con su evento de CAPI. Si tu tag de GTM usa `transaction_id` (el ID interno de AFRUS) en lugar de `transaction_gateway_code`, NO deduplicará con AFRUS — terminarás con doble conteo. Asegúrate de mapear el campo correcto.
+> **Importante:** AFRUS usa `transaction_gateway_code` (la referencia que devuelve la pasarela de pago) como clave de deduplicación. Hoy `transaction_id` lleva el mismo valor, pero recomendamos mapear `transaction_gateway_code`: es el campo que siempre contiene la referencia de la pasarela. Antes de septiembre de 2026, `transaction_id` llevaba el ID interno de AFRUS; si tus tags lo usan, cámbialas a `transaction_gateway_code`. La referencia interna ahora está en `ecommerce.donation_id`.
+
+**Cuándo se publica `purchase` en el `dataLayer`:** solo cuando el pago está confirmado.
+
+- **Tarjeta y otros métodos de confirmación inmediata:** al aprobarse el cobro.
+- **Pix, boleto y otros métodos asíncronos:** cuando la pasarela confirma el pago, y solo si el donante sigue en la página del widget. Si la cerró antes, no hay `dataLayer.push`, pero AFRUS envía la conversión a Meta y GA4 desde el servidor igual.
+
+Por eso, una tag de GTM propia va a contar menos compras asíncronas que las que AFRUS reporta.
 
 **Configuración recomendada de Meta Pixel tag en GTM:**
 
@@ -126,6 +134,8 @@ Event Parameters:
 ```
 
 **Configuración recomendada de GA4 tag en GTM:**
+
+> AFRUS ya envía el `purchase` a GA4 desde el servidor, una vez por compra. Si configuras esta tag, GA4 recibe la misma compra dos veces y depende del `transaction_id` para descartar la repetida. Si no necesitas la tag, lo más simple es no configurarla.
 
 ```
 Event Name: purchase
@@ -168,7 +178,7 @@ Event Parameters:
 
 2. **Meta Events Manager → Event Deduplication tab** para el evento `Lead` o `Purchase`: el porcentaje de `Event ID coverage` debería superar el 75% (umbral recomendado por Meta).
 
-3. **GA4 DebugView:** dispara un evento `purchase` y verifica que aparezca con el campo `transaction_id` poblado con el valor de `transaction_gateway_code`. Si dos eventos tienen el mismo `transaction_id`, GA4 los dedupea automáticamente.
+3. **GA4 DebugView (con GTM en modo Preview):** verifica que el `purchase` de tu tag lleve `transaction_id` = el valor de `transaction_gateway_code`. El `purchase` que envía el servidor de AFRUS no aparece en DebugView; búscalo en **Informes → Tiempo real**. Los dos deben tener el mismo `transaction_id`.
 
 4. **Panel AFRUS de eventos analíticos** (`/processes/analytics-events`): confirma que el evento se registró del lado servidor. La columna `description` contendrá `ANALYTIC-EVENT-FACEBOOK-LEAD` o `ANALYTIC-EVENT-FACEBOOK-PURCHASE`, y el `event_id` en el payload debe coincidir con el `eventID` que envía tu tag de GTM.
 
