@@ -40,6 +40,13 @@ Avisos por correo al captador y al supervisor, y protección de datos en disposi
 
 - [Guía de Face to Face](./face-to-face/face-to-face-guide.md) — activación y configuración, cuándo se envía el aviso por correo y qué contiene, cómo desactivar el autocompletado del navegador en tablets compartidas (qué cubre y qué no), el atributo `disable-autofill` para formularios insertados en un sitio propio, buenas prácticas y preguntas frecuentes.
 
+### [Entradas (venta de entradas con QR)](./event-ticketing/)
+
+Venta de entradas a eventos desde un widget de donación, registro de invitados, códigos QR y control de ingreso en la puerta.
+
+- [Guía de uso de Entradas](./event-ticketing/event-ticketing-guide.md) — paso a paso con capturas anotadas: crear el evento y sus tipos de entrada, ponerlo en un widget, la compra, el registro de invitados, los correos con los QR, la gestión de compras (reenvíos y anulaciones) y el escáner de puerta con modo sin conexión. También en [PDF](./event-ticketing/guia-de-uso-entradas-afrus.pdf).
+- [Cómo funciona Entradas](./event-ticketing/how-it-works.md) — visión general: la vida de una entrada, reglas de cupo, registro y consentimiento de invitados, QR, correos, tablero, la puerta y las reglas que protegen el dinero y los datos.
+
 ## Próximamente
 
 Las siguientes secciones están planificadas y se irán incorporando a medida que la documentación esté lista. El orden de aparición se ajustará según prioridades.
@@ -61,4 +68,4 @@ Este repositorio es mantenido por el equipo AFRUS. Si encuentras información de
 
 ---
 
-*Última actualización del índice: 2026-09-25*
+*Última actualización del índice: 2026-10-08*
