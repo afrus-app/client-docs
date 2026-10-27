@@ -34,6 +34,12 @@ Secuencias automatizadas de correos, etiquetas y puntos.
 
 - [Guía completa de Flujos de trabajo](./workflows/workflows-guide.md) — paso a paso de creación, los seis tipos de paso, disparadores de entrada y salida, la meta, filtros de inscripción, inscripción retroactiva, ventana de envío, ciclo de vida y cómo leer el reporte (tasa de meta, entrega por paso, historial por persona). Incluye buenas prácticas, limitaciones conocidas y preguntas frecuentes.
 
+### [Incentivos de campaña](./campaign-incentives/)
+
+Recompensas por monto donado, cupones, regalos para terceros y entrega de las recompensas.
+
+- [Guía de Incentivos de campaña](./campaign-incentives/campaign-incentives-guide.md) — cómo lo vive el donante (mínimos por frecuencia, desbloqueo, preselección), cupones, regalo para terceros, moneda, configuración en la consola (catálogo, mapa y simulador), panel de entregas, entrega automática con flujos de trabajo y tipo de donación en transacciones. Incluye reglas, limitaciones conocidas y preguntas frecuentes.
+
 ### [Face to Face (captación presencial)](./face-to-face/)
 
 Avisos por correo al captador y al supervisor, y protección de datos en dispositivos compartidos.
