@@ -136,4 +136,4 @@ El comprador recibe el correo **«Registra a tus asistentes»** con un enlace pr
 
 > **[Volver al índice de la sección](./README.md)** · **[Volver al índice general](../README.md)**
 
-*Última actualización: 2026-10-08*
+*Última actualización: 2026-10-28*

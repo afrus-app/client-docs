@@ -443,4 +443,4 @@ No. Cada teléfono usa su propio enlace de dispositivo, creado en la pestaña **
 
 > **[Volver al índice de la sección](./README.md)** · **[Volver al índice general](../README.md)**
 
-*Última actualización: 2026-10-08*
+*Última actualización: 2026-10-28*
