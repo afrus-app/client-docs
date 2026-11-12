@@ -18,6 +18,10 @@ Paso a paso con capturas anotadas, en 18 pasos y seis partes. También disponibl
 - Puerta: dispositivos, el escáner, admitir, «ya ingresó», forzar ingreso, modo sin conexión y contador en vivo
 - Preguntas frecuentes
 
+### [Crear las plantillas de WhatsApp para entradas](./whatsapp-templates-guide.md)
+
+Cómo crear las dos plantillas de WhatsApp (enlace de registro y recordatorio) que exige el evento: reglas de categoría, variables y botón de enlace, ejemplos para copiar en español e inglés, cómo conectarlas en Detalles → WhatsApp, qué significa cada aviso de «No lista» y cómo probar con una compra.
+
 ### [Cómo funciona Entradas](./how-it-works.md)
 
 Visión general del módulo: la vida de una entrada, el evento y sus tipos, el widget, el registro de invitados y el consentimiento, el QR, los correos, la consola, la puerta y las reglas que protegen el dinero y los datos. Incluye las limitaciones conocidas.
@@ -30,4 +34,4 @@ Visión general del módulo: la vida de una entrada, el evento y sus tipos, el w
 
 ---
 
-*Última actualización: 2026-10-08*
+*Última actualización: 2026-11-12*
