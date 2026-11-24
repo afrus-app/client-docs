@@ -47,7 +47,7 @@ Las dos plantillas deben cumplir exactamente lo mismo. AFRUS revisa estas reglas
 | **Pie de página** | Opcional, de texto fijo. |
 | **Botón** | **Exactamente un** botón de enlace (URL) con URL dinámica. Puede haber otros tipos de botón, pero solo un botón de enlace dinámico. |
 | **URL del botón** | La **dirección de registro de Entradas** seguida de `{{1}}`, tal cual la muestra la consola (ver más abajo). |
-| **Idioma** | Cualquier idioma pasa la revisión de AFRUS. La fecha de `{{3}}` se escribe en español o en inglés (inglés si el comprador usa inglés; si no, español). Ver «Dos idiomas». |
+| **Idioma** | Cualquier idioma pasa la revisión de AFRUS. AFRUS usa el idioma del comprador si es uno de los idiomas del evento; si no, el primer idioma del evento. La fecha de `{{3}}` se escribe en inglés si ese idioma es el inglés y en español en cualquier otro caso. Ver «Dos idiomas». |
 
 ### Qué se pone en cada variable
 
@@ -120,7 +120,7 @@ Muestras para las variables al enviarlas a Meta: `{{1}}` = «María», `{{2}}` =
 
 ### Dos idiomas (opcional)
 
-Puedes crear la misma plantilla en español y en inglés, con **el mismo nombre** y la misma estructura. AFRUS busca primero la versión en el idioma del comprador y, si esa versión no existe, usa la del idioma que elegiste al guardar. Dos reglas importantes:
+Puedes crear la misma plantilla en español y en inglés, con **el mismo nombre** y la misma estructura. AFRUS busca primero la versión en el idioma del comprador si es uno de los idiomas del evento, o en el primer idioma del evento si no lo es (por ejemplo, un comprador que habla inglés en un evento solo en español recibe la versión en español). Si esa versión no existe, usa la del idioma que elegiste al guardar. Dos reglas importantes:
 
 - **Todos los idiomas aprobados deben cumplir las reglas.** Si el español está bien y el inglés aprobado no (por ejemplo, otro botón), la plantilla completa aparece como «No lista».
 - Publicar un mismo nombre en dos idiomas es una opción de Meta; si prefieres evitarlo, crea solo una plantilla en un idioma.
