@@ -51,6 +51,7 @@ Avisos por correo al captador y al supervisor, y protección de datos en disposi
 Venta de entradas a eventos desde un widget de donación, registro de invitados, códigos QR y control de ingreso en la puerta.
 
 - [Guía de uso de Entradas](./event-ticketing/event-ticketing-guide.md) — paso a paso con capturas anotadas: crear el evento y sus tipos de entrada, ponerlo en un widget, la compra, el registro de invitados, los correos con los QR, la gestión de compras (reenvíos y anulaciones) y el escáner de puerta con modo sin conexión. También en [PDF](./event-ticketing/guia-de-uso-entradas-afrus.pdf).
+- [Crear las plantillas de WhatsApp para entradas](./event-ticketing/whatsapp-templates-guide.md) — las dos plantillas que exige el evento (enlace de registro y recordatorio): reglas, variables, botón de enlace, ejemplos para copiar, conexión en el evento y qué significa cada aviso de «No lista».
 - [Cómo funciona Entradas](./event-ticketing/how-it-works.md) — visión general: la vida de una entrada, reglas de cupo, registro y consentimiento de invitados, QR, correos, tablero, la puerta y las reglas que protegen el dinero y los datos.
 
 ## Próximamente
